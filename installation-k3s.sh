@@ -5,8 +5,9 @@ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scrip
 chmod 700 get_helm.sh
 ./get_helm.sh
 
-#Create a namespace for Rancher manager server
-kubectl create namespace cattle-system
+#Create symbolic link for kubeconfig
+mkdir -p ~/.kube
+ln -s /etc/rancher/k3s/k3s.yaml ~/.kube/config
 
 #Install cert-manager CRDs
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.14.4/cert-manager.crds.yaml
@@ -21,4 +22,11 @@ helm repo update
 helm install cert-manager jetstack/cert-manager \
   --namespace cert-manager \
   --create-namespace \
-  --set installCRDs=true
+
+#Install Rancher manager
+helm install rancher rancher-stable/rancher \
+  --namespace cattle-system \
+  --create-namespace \
+  --set hostname=rancherman.geeko.ninja \
+  --set bootstrapPassword=geeko \
+  --set replicas=1
