@@ -21,7 +21,7 @@ helm repo update
 # Install the cert-manager Helm chart
 helm install cert-manager jetstack/cert-manager \
   --namespace cert-manager \
-  --create-namespace \
+  --create-namespace
 
 #Install Rancher manager
 helm install rancher rancher-stable/rancher \
@@ -30,3 +30,5 @@ helm install rancher rancher-stable/rancher \
   --set hostname=rancherman.geeko.ninja \
   --set bootstrapPassword=geeko \
   --set replicas=1
+
+#Make sure you're using a DNS or create your hostname in /etc/hosts file
